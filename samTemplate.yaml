@@ -118,33 +118,31 @@ Resources:
                   description: Unexpected error
                   schema:
                     $ref: '#/definitions/Error'
-          /upload:
-            /{folder}:
-              /{item}:
-                put:
-                  summary: photo upload method
-                  description: |
-                    This API takes in the multi-part body sent to it (ex. a photo) and uploads it to an S3 bucket.
-                  operationId: uploadPhoto
-                  consumes:
-                    - image/png
-                    - image/jpg
-                    - image/jpeg
-                  produces:
-                    - application/json
-                  responses:
-                    '200':
-                      description: S3 PUT operation response
-                      schema:
-                        type: object
-                    '403':
-                      description: Unauthorized
-                      schema:
-                        $ref: '#/definitions/Error'
-                    '500':
-                      description: Unexpected error
-                      schema:
-                        $ref: '#/definitions/Error'
+          /upload/{folder}/{item}:
+              put:
+                summary: photo upload method
+                description: |
+                  This API takes in the multi-part body sent to it (ex. a photo) and uploads it to an S3 bucket.
+                operationId: uploadPhoto
+                consumes:
+                  - image/png
+                  - image/jpg
+                  - image/jpeg
+                produces:
+                  - application/json
+                responses:
+                  '200':
+                    description: S3 PUT operation response
+                    schema:
+                      type: object
+                  '403':
+                    description: Unauthorized
+                    schema:
+                      $ref: '#/definitions/Error'
+                  '500':
+                    description: Unexpected error
+                    schema:
+                      $ref: '#/definitions/Error'
         definitions:
           SearchResponse:
             type: object
