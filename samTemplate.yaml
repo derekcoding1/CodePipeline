@@ -103,7 +103,7 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
               - Resource:
-                  #- !Sub arn:aws:s3:::${AssetsBucket}/*
+                  - !Sub arn:aws:s3:::${bucket}/*
                   #- !Sub arn:aws:s3:::${ClientBucket}/*
                   #- !Sub arn:aws:s3:::${ClientBucket}
                 Effect: Allow
@@ -137,7 +137,7 @@ Resources:
             Version: 2012-10-17
             Statement:
               - Resource:
-                  #- !Sub arn:aws:s3:::${AssetsBucket}/*
+                  - !Sub arn:aws:s3:::${bucket}/*
                   #- !Sub arn:aws:s3:::${ClientBucket}/*
                   #- !Sub arn:aws:s3:::${ClientBucket}
                 Effect: Allow
