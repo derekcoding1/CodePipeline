@@ -33,7 +33,8 @@ Resources:
         - arn:aws:iam::aws:policy/AmazonRekognitionFullAccess
         - arn:aws:iam::975475373144:policy/service-role/AWSLambdaBasicExecutionRole-675f5d5a-3bd7-4ce4-a2ae-72a22182526f
       Path: /service-role/
-      RoleName:test-hw3
+      RoleName: test-hw3
+      
   IndexLambda:
     Type: 'AWS::Serverless::Function'
     Properties:
@@ -55,6 +56,7 @@ Resources:
       Environment:
         Variables:
           REGION: us-east-1
+          
   SearchLambda:
     Type: 'AWS::Serverless::Function'
     Properties:
