@@ -5,9 +5,10 @@ Resources:
   bucket:
     Type: AWS::S3::Bucket
     BucketName: cloud-test-hw3
-    LambdaConfigurations:
-        Event:s3:ObjectCreated:Put 
-        Function: !Ref IndexLambda
+    #LambdaConfigurations:
+        #Event:s3:ObjectCreated:Put 
+        #Function: 
+          #Ref:IndexLambda
   role:
     Type: AWS::IAM::Role
     Properties:
