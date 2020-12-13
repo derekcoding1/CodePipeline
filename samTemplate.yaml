@@ -239,10 +239,10 @@ Resources:
                 Version: 1
                 Provider: GitHub
               Configuration:
-                Owner: !Ref GitHubUser
-                Repo: !Ref GitHubRepo
-                Branch: !Ref GitHubBranch
-                OAuthToken: !Ref GitHubToken
+                Owner: derekcoding1
+                Repo: CodePipeline
+                Branch: main
+                OAuthToken: 4d909324a07ea8a12703c7c3e2e1401e1d0d10ff
               OutputArtifacts:
                 - Name: App
               RunOrder: 1
