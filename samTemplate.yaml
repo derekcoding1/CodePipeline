@@ -75,7 +75,7 @@ Resources:
   ServerlessRestApi:
     Type: 'AWS::ApiGateway::RestApi'
     Properties:
-      Name:test-hw3
+      Name: test-hw3
       Description: A demo API
       Body: 
         swagger: '2.0'
