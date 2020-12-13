@@ -76,6 +76,7 @@ Resources:
     Type: 'AWS::ApiGateway::RestApi'
     Properties:
       Name:test-hw3
+      Description: A demo API
       Body: 
         swagger: '2.0'
         info:
