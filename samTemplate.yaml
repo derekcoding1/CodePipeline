@@ -103,9 +103,9 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
               - Resource:
-                  - !Sub arn:aws:s3:::${AssetsBucket}/*
-                  - !Sub arn:aws:s3:::${ClientBucket}/*
-                  - !Sub arn:aws:s3:::${ClientBucket}
+                  #- !Sub arn:aws:s3:::${AssetsBucket}/*
+                  #- !Sub arn:aws:s3:::${ClientBucket}/*
+                  #- !Sub arn:aws:s3:::${ClientBucket}
                 Effect: Allow
                 Action:
                   - s3:PutObject
@@ -137,9 +137,9 @@ Resources:
             Version: 2012-10-17
             Statement:
               - Resource:
-                  - !Sub arn:aws:s3:::${AssetsBucket}/*
-                  - !Sub arn:aws:s3:::${ClientBucket}/*
-                  - !Sub arn:aws:s3:::${ClientBucket}
+                  #- !Sub arn:aws:s3:::${AssetsBucket}/*
+                  #- !Sub arn:aws:s3:::${ClientBucket}/*
+                  #- !Sub arn:aws:s3:::${ClientBucket}
                 Effect: Allow
                 Action:
                   - s3:PutObject
@@ -218,7 +218,7 @@ Resources:
           - Name: AWS_DEFAULT_REGION
             Value: !Ref AWS::Region
           - Name: S3_CLIENT_BUCKET
-            Value: !Ref ClientBucket
+            #Value: !Ref ClientBucket
       Name: !Sub ${AWS::StackName}-deploy-client
       ServiceRole: !Ref CodeBuildServiceRole
 
@@ -228,7 +228,7 @@ Resources:
       RoleArn: !GetAtt CodePipelineServiceRole.Arn
       ArtifactStore:
         Type: S3
-        Location: !Ref AssetsBucket
+        #Location: !Ref AssetsBucket
       Stages:
         - Name: Source
           Actions:
