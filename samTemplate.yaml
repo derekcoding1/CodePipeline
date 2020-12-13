@@ -4,7 +4,8 @@ Description: CD Demo Lambda
 Resources:
   bucket:
     Type: AWS::S3::Bucket
-    BucketName: cloud-test-hw3
+    Properties: 
+      BucketName: cloud-test-hw3
     #LambdaConfigurations:
         #Event:s3:ObjectCreated:Put 
         #Function: 
