@@ -218,7 +218,7 @@ Resources:
           - Name: AWS_DEFAULT_REGION
             Value: !Ref AWS::Region
           - Name: S3_CLIENT_BUCKET
-            #Value: !Ref ClientBucket
+            Value: !Ref bucket
       Name: !Sub ${AWS::StackName}-deploy-client
       ServiceRole: !Ref CodeBuildServiceRole
 
