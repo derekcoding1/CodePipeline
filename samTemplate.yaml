@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Transform: 'AWS::Serverless-2016-10-31'
+#Transform: 'AWS::Serverless-2016-10-31'
 Description: CD Demo Lambda
 Resources:
   bucket:
@@ -10,20 +10,20 @@ Resources:
         #Event:s3:ObjectCreated:Put 
         #Function: 
           #Ref:IndexLambda
-  #role:
-    #Type: AWS::IAM::Role
-    #Properties:
-     # AssumeRolePolicyDocument:
-        #Version: "2012-10-17"
-        #Statement:
-            #Effect: Allow
-            #Principal:
-              #Service:
-                #- lambda.amazonaws.com
-            #Action:
-              #- sts:AssumeRole
-      #ManagedPolicyArns:
-        #- arn:aws:iam::aws:policy/AdministratorAccess
+  role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
         #- arn:aws:iam::${AWS::AccountId}:role/LF1
         #- arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess
         #- arn:aws:iam::aws:policy/AmazonS3FullAccess
@@ -35,7 +35,7 @@ Resources:
         #- arn:aws:iam::aws:policy/AmazonRekognitionFullAccess
         #- arn:aws:iam::975475373144:policy/service-role/AWSLambdaBasicExecutionRole-675f5d5a-3bd7-4ce4-a2ae-72a22182526f
       #Path: /service-role/
-      #RoleName: test-hw3
+      RoleName: test-hw3
       
   IndexLambda:
     Type: 'AWS::Serverless::Function'
