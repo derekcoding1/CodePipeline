@@ -79,6 +79,90 @@ Resources:
       # Environment:
         # Variables:
           # REGION: us-east-1
+  CodeBuildServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument: |
+        {
+            "Statement": [{
+                "Effect": "Allow",
+                "Principal": { "Service": [ "codebuild.amazonaws.com" ]},
+                "Action": [ "sts:AssumeRole" ]
+            }]
+        }
+      Policies:
+        - PolicyName: client-code-build-policy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Resource: "*"
+                Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+              - Resource:
+                  - !Sub arn:aws:s3:::${AssetsBucket}/*
+                  - !Sub arn:aws:s3:::${ClientBucket}/*
+                  - !Sub arn:aws:s3:::${ClientBucket}
+                Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:PutObjectAcl
+                  - s3:GetObject
+                  - s3:GetObjectVersion
+                  - s3:GetBucketVersioning
+              - Resource: "*"
+                Effect: Allow
+                Action:
+                  - s3:ListAllMyBuckets
+                  - s3:ListObjects
+
+  CodePipelineServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument: |
+        {
+            "Statement": [{
+                "Effect": "Allow",
+                "Principal": { "Service": [ "codepipeline.amazonaws.com" ]},
+                "Action": [ "sts:AssumeRole" ]
+            }]
+        }
+      Policies:
+        - PolicyName: code-pipeline-policy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Resource:
+                  - !Sub arn:aws:s3:::${AssetsBucket}/*
+                  - !Sub arn:aws:s3:::${ClientBucket}/*
+                  - !Sub arn:aws:s3:::${ClientBucket}
+                Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:PutObjectAcl
+                  - s3:GetObject
+                  - s3:GetObjectVersion
+                  - s3:GetBucketVersioning
+                  - s3:ListObjects
+              - Resource:
+                  - arn:aws:s3:::*
+                Effect: Allow
+                Action:
+                  - s3:ListAllMyBuckets
+              - Resource: "*"
+                Effect: Allow
+                Action:
+                  - codebuild:StartBuild
+                  - codebuild:BatchGetBuilds
+                  - iam:PassRole
+              - Resource: "*"
+                Effect: Allow
+                Action:
+                  - lambda:*
   ClientBuildProject:
     Type: AWS::CodeBuild::Project
     Properties:
