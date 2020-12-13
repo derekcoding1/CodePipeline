@@ -34,7 +34,7 @@ Resources:
         #- arn:aws:iam::975475373144:policy/ESPolicy
         #- arn:aws:iam::aws:policy/AmazonRekognitionFullAccess
         #- arn:aws:iam::975475373144:policy/service-role/AWSLambdaBasicExecutionRole-675f5d5a-3bd7-4ce4-a2ae-72a22182526f
-      Path: /service-role/
+      #Path: /service-role/
       RoleName: test-hw3
       
   IndexLambda:
