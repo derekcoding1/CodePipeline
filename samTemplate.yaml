@@ -2,17 +2,49 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: CD Demo Lambda
 Resources:
-  CDDemoLambda:
+  bucket:
+    Type: AWS::S3::Bucket
+    BucketName: cloud-test-hw3
+    LambdaConfigurations:
+        Event:s3:ObjectCreated:Put 
+        Function: !Ref IndexLambda
+  role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaRole
+        - arn:aws:iam::aws:policy/service-role/AWSQuickSightElasticsearchPolicy
+        - arn:aws:iam::975475373144:policy/ESPolicy
+        - arn:aws:iam::aws:policy/AmazonRekognitionFullAccess
+        - arn:aws:iam::975475373144:policy/service-role/AWSLambdaBasicExecutionRole-675f5d5a-3bd7-4ce4-a2ae-72a22182526f
+      Path: /service-role/
+      RoleName:test-hw3
+  IndexLambda:
     Type: 'AWS::Serverless::Function'
     Properties:
-      FunctionName: LF2
+      FunctionName: LF1
       Handler: lambda_function.lambda_handler
-      Runtime: python3.6
-      CodeUri: ./LambdaCode
-      Description: 'Lambda function for CD Demo'
+      Runtime: python3.8
+      CodeUri: ./LambdaCode1
+      Description: 'Lambda function for Index photos'
       MemorySize: 128
       Timeout: 30
-      Role: 'arn:aws:iam::975475373144:role/service-role/search-photos-role-o0m7excf'
+      #Role: 'arn:aws:iam::975475373144:role/service-role/search-photos-role-o0m7excf'
+      Role: !Ref role
       Events:
         getPicsAPI:
           Type: Api
@@ -22,3 +54,113 @@ Resources:
       Environment:
         Variables:
           REGION: us-east-1
+  SearchLambda:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      FunctionName: LF2
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.8
+      CodeUri: ./LambdaCode2
+      Description: 'Lambda function for photo search'
+      MemorySize: 128
+      Timeout: 30
+      #Role: 'arn:aws:iam::975475373144:role/service-role/search-photos-role-o0m7excf'
+      Role: !Ref role
+      Environment:
+        Variables:
+          REGION: us-east-1
+  ServerlessRestApi:
+    Type: 'AWS::ApiGateway::RestApi'
+    Properties:
+      Name:test-hw3
+      body: 
+        swagger: '2.0'
+        info:
+          title: AI Photo Search
+          description: 'AI Photo Search application, built during the Cloud and Big Data course at Columbia University.'
+          version: 1.0.0
+        schemes:
+          - https
+        basePath: /v1
+        produces:
+          - application/json
+        paths:
+          /search:
+            get:
+              summary: photo search method
+              description: |
+                This API takes in a search query as a query parameter and returns zero or more photos that match the search query.
+              operationId: searchPhotos
+              parameters:
+                - in: query
+                  name: q
+                  schema:
+                    type: string
+                  description: the string to be searched
+              produces:
+                - application/json
+              responses:
+                '200':
+                  description: search results
+                  schema:
+                    $ref: '#/definitions/SearchResponse'
+                '403':
+                  description: Unauthorized
+                  schema:
+                    $ref: '#/definitions/Error'
+                '500':
+                  description: Unexpected error
+                  schema:
+                    $ref: '#/definitions/Error'
+          /upload:
+            put:
+              summary: photo upload method
+              description: |
+                This API takes in the multi-part body sent to it (ex. a photo) and uploads it to an S3 bucket.
+              operationId: uploadPhoto
+              consumes:
+                - image/png
+                - image/jpg
+                - image/jpeg
+              produces:
+                - application/json
+              responses:
+                '200':
+                  description: S3 PUT operation response
+                  schema:
+                    type: object
+                '403':
+                  description: Unauthorized
+                  schema:
+                    $ref: '#/definitions/Error'
+                '500':
+                  description: Unexpected error
+                  schema:
+                    $ref: '#/definitions/Error'
+        definitions:
+          SearchResponse:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Photo'
+          Photo:
+            type: object
+            properties:
+              url:
+                type: string
+              labels:
+                type: array
+                items:
+                  type: string
+          Error:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+
+  
