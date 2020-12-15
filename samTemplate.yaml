@@ -30,7 +30,7 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AdministratorAccess
         #- arn:aws:iam::${AWS::AccountId}:role/LF1
-        #- arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess
+        - arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess
         #- arn:aws:iam::aws:policy/AmazonS3FullAccess
         #- arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
         #- arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
